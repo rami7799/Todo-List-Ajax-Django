@@ -6,7 +6,7 @@ class Todos(models.Model):
     title = models.CharField(max_length=150)
     text = models.CharField(max_length=150)
     completed = models.BooleanField(default=False)
-    user = models.ForeignKey(User , on_delete=models.CASCADE)
+    user = models.ForeignKey(User , on_delete=models.CASCADE , null=True)
 
     def __str__(self) -> str:
         return self.title
