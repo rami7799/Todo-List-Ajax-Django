@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Todo List</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<style>
+
+	body{
+		background-color: #638CB8;
+	}
+
+	input{
+		width: 100%;
+		padding: 12px 20px;
+		margin: 8px 0;
+		box-sizing: border-box;
+	}
+
+	input::placeholder {
+	  color: #d3d3d3;
+	}
+
+	.submit{
+		background-color: #6BA3E8;
+	}
+
+	.center-column{
+		width:600px;
+		margin: 20px auto;
+		padding:20px;
+		background-color: #fff;
+		border-radius: 3px;
+		box-shadow: 6px 2px 30px 0px rgba(0,0,0,0.75);
+	}
+
+	.item-row{
+		background-color: #906abd;
+		margin: 10px;
+		padding: 20px;
+		border-radius: 3px;
+		color: #fff;
+		font-size: 16px;
+		box-shadow: 0px -1px 10px -4px rgba(0,0,0,0.75);
+	}
+
+	.btn-danger{
+		background-color: #ffae19;
+		border-color: #e59400;
+	}
+
+</style>
+</head>
+<body>
+	<div class="center-column">
+
+		<form method="POST" id="todo-form">
+			{% csrf_token %}
+			<input type="text" id="todo" name="todo">
+			<input class="btn btn-info" type="submit" name="Create Task">
+		</form>
+	
+		<div class="todo-list">
+	
+			<div class="item-row">
+	
+				
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+
+<script>
+	$(document).ready(function() {
+		setInterval(function() {
+				$.ajax({
+				type: 'GET',
+				url: '/todo-list',
+				success: function(res) {
+					console.log(res.data)
+					$(".item-row").empty();
+					for (item in res.data) {
+						var temp = "<a class='btn btn-sm btn-info' href=''>Update</a> <button class='btn btn-sm btn-danger' id='delete-todo'>Delete</button>" 
+						$(".item-row").append(temp + "  <span>" + res.data[item].title + "</span><hr>")
+					}
+					
+				}
+			})
+		} , 2000);
+		$("#todo-form").on("submit" , function(e) {
+			e.preventDefault();
+			console.log($("#todo").val())
+			$.ajax({
+				type: 'POST',
+				url: "/add-todo",
+				data: {
+					"todo" : $("#todo").val(),
+					csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
+				},
+				success: function(){
+					console.log("submitted");
+				}
+			})
+		})
+		
+	})
+	$(document).ready(function() {
+		$("#delete-todo").click(function(){
+			console.log("clicked")
+		})
+	})
+	
+</script>
+
+
