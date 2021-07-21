@@ -42,6 +42,7 @@
     <div class="center-column">
         <h2>Login Page</h2>
         <form method="POST">
+            {% csrf_token %}
             <input type="text" placeholder="Username" name="username" id="username">
             <input type="password" placeholder="Password" name="password" , id="password">
             <button class="btn">Login</button>
