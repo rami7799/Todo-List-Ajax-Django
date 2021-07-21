@@ -14,9 +14,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-)@!kr48s5uca(&y+_ce2gvk(qbk7)e2747+htia!m$kpyv&uzl'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['todo-app-django-ajax.herokuapp.com']
+ALLOWED_HOSTS = []
 
 
 # Application definition
