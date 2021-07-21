@@ -2,7 +2,7 @@ from django.shortcuts import redirect, render
 from .models import Todos
 from django.http import JsonResponse , HttpResponse
 from django.template.loader import render_to_string 
-from django.contrib.auth import login , authenticate
+from django.contrib.auth import login , authenticate , logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
@@ -45,7 +45,7 @@ def login_user(request):
 
 @login_required(login_url="/login")
 def todo_list(request):
-    todos = Todos.objects.order_by("-id")
+    todos = Todos.objects.order_by("-id").filter(user_id=request.user.id)
     todos = render_to_string("ajax/todo-list.html" , {"todos" : todos})
     return JsonResponse({'data' : todos})
 
@@ -55,7 +55,7 @@ def add_todo(request):
     if request.method == "POST":
         todo = request.POST.get("todo")
         print(todo)
-        Todos.objects.create(title = todo)
+        Todos.objects.create(title = todo , user_id=request.user.id)
         return HttpResponse("good")
 
 
@@ -63,7 +63,7 @@ def add_todo(request):
 def delete_todo(request):
     id = request.GET["id"]
     print(id)
-    todo = Todos.objects.get(id=id)
+    todo = Todos.objects.get(id=id , user_id=request.user.id)
     todo.delete()
     return HttpResponse("task deleted")
 
@@ -72,7 +72,11 @@ def delete_todo(request):
 def update_todo(request):
     id = request.GET["id"]
     print(id)
-    todo = Todos.objects.get(id=id)
+    todo = Todos.objects.get(id=id , user_id=request.user.id)
     todo.completed = True
     todo.save()
     return HttpResponse("task updated")
+
+def log_out(request):
+    logout(request)
+    return redirect("/login")
