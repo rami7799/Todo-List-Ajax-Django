@@ -2,7 +2,7 @@ from django.shortcuts import redirect, render
 from .models import Todos
 from django.http import JsonResponse , HttpResponse
 from django.template.loader import render_to_string 
-from django.contrib.auth import login , authenticate , logout
+from django.contrib.auth import login , logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
