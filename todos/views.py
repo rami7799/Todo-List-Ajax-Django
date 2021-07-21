@@ -4,20 +4,43 @@ from django.http import JsonResponse , HttpResponse
 from django.template.loader import render_to_string 
 from django.contrib.auth import login , authenticate
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
 
+@login_required(login_url="/login")
 def home(request):
     return render(request , "home.html")
 
-def login(request):
-
-    username = request.POST.get('username')
-    password = request.POST.get('password')
-    user = authenticate(request , username=username , password=password)
-    if user is not None:
-        login(user)
+def login_page(request):
+    if request.user.is_authenticated:
         return redirect("/")
     return render(request , "login.html")
+
+def register_page(request):
+    return render(request , "register.html")
+
+def register_user(request):
+    if request.method == "POST":
+        username = request.POST.get("username")
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        re_password = request.POST.get("re-password")
+        if password == re_password:
+            User.objects.create(username=username , email=email , password=password)
+            return redirect("/")
+        else:
+            return HttpResponse("invalid")
+
+def login_user(request):
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        user = User.objects.get(username=username , password=password)
+        if user is not None:
+            login(request , user)
+            return redirect("/")
+        else:
+            return redirect("/hfgh")
 
 
 @login_required(login_url="/login")
