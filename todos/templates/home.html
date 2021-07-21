@@ -64,11 +64,7 @@
 		</form>
 	
 		<div class="todo-list">
-	
-			<div class="item-row">
-	
-				
-			</div>
+			<div class="preloader">Loading...</div>
 		</div>
 	</div>
 </body>
@@ -76,22 +72,24 @@
 
 <script>
 	$(document).ready(function() {
+		$(".preloader").show()
 		setInterval(function() {
 				$.ajax({
 				type: 'GET',
 				url: '/todo-list',
 				success: function(res) {
-					console.log(res.data)
-					$(".item-row").empty();
-					for (item in res.data) {
-						var temp = "<a class='btn btn-sm btn-info' href=''>Update</a> <button class='btn btn-sm btn-danger' id='delete-todo'>Delete</button>" 
-						$(".item-row").append(temp + "  <span>" + res.data[item].title + "</span><hr>")
-					}
+					// console.log(res.data)
+					$(".todo-list").empty();
+					$(".todo-list").html(res.data)
 					
+				},
+				complete: function() {
+					$(".preloader").hide()
 				}
 			})
-		} , 2000);
+		} , 1000);
 		$("#todo-form").on("submit" , function(e) {
+			$(".preloader").show()
 			e.preventDefault();
 			console.log($("#todo").val())
 			$.ajax({
@@ -103,15 +101,13 @@
 				},
 				success: function(){
 					console.log("submitted");
+				},
+				complete: function() {
+					$(".preloader").hide()
 				}
 			})
 		})
 		
-	})
-	$(document).ready(function() {
-		$("#delete-todo").click(function(){
-			console.log("clicked")
-		})
 	})
 	
 </script>

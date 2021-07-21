@@ -1,0 +1,43 @@
+{% for task in todos %}
+<div class="item-row">
+    <a class="btn btn-sm btn-info" id="update-task{{ task.id }}" data-filter="{{ task.id }}">Done</a>
+    <a class="btn btn-sm btn-danger" id="delete-task{{ task.id }}" data-filter="{{ task.id }}">Delete</a>
+    {% if task.completed == True %}
+    <strike>{{task}}</strike>
+    {% else %}
+    <span>{{task}}</span>
+    {% endif %}
+</div>
+<script>
+    $(document).ready(function() {
+        $("#delete-task{{ task.id }}").on("click" , function(e) {
+            console.log("clicked{{ task.id }}");
+            var task_id = $("#delete-task{{ task.id }}").attr("data-filter")
+            $.ajax({
+                type: "GET",
+                url: "/delete-todo",
+                data: {
+                    id : task_id
+                },
+                success: function(response){
+                    alert(response)
+                }
+            });
+        });
+        $("#update-task{{ task.id }}").on("click" , function() {
+            var task_id = $("#update-task{{ task.id }}").attr("data-filter");
+            console.log(task_id)
+            $.ajax({
+                type: "GET",
+                url: "/update-todo",
+                data: {
+                    id : task_id
+                },
+                success: function(response){
+                    alert(response)
+                }
+            });
+        });
+    });
+</script>
+{% endfor %}
