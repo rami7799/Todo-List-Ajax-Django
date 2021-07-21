@@ -72,7 +72,7 @@
 
 <script>
 	$(document).ready(function() {
-		$(".preloader").show()
+		$(".preloader").show();
 		setInterval(function() {
 				$.ajax({
 				type: 'GET',
@@ -86,10 +86,10 @@
 				complete: function() {
 					$(".preloader").hide()
 				}
-			})
+			});
 		} , 1000);
 		$("#todo-form").on("submit" , function(e) {
-			$(".preloader").show()
+			$(".preloader").show();
 			e.preventDefault();
 			console.log($("#todo").val())
 			$.ajax({
@@ -105,11 +105,9 @@
 				complete: function() {
 					$(".preloader").hide()
 				}
-			})
-		})
-		
-	})
-	
+			});
+		});		
+	});
 </script>
 
 
