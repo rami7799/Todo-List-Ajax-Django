@@ -5,18 +5,18 @@ from django.template.loader import render_to_string
 from django.contrib.auth import login , authenticate
 from django.contrib.auth.decorators import login_required
 
-@login_required(login_url="/login")
+
 def home(request):
     return render(request , "home.html")
 
 def login(request):
-    if request.method == "POST":
-        username = request.POST["username"]
-        password = request.POST["password"]
-        user = authenticate(request , username=username , password=password)
-        if user is not None:
-            login(user)
-            return redirect("/")
+
+    username = request.POST.get('username')
+    password = request.POST.get('password')
+    user = authenticate(request , username=username , password=password)
+    if user is not None:
+        login(user)
+        return redirect("/")
     return render(request , "login.html")
 
 
