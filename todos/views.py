@@ -11,7 +11,7 @@ def home(request):
 
 def login(request):
     if request.method == "POST":
-        username = request.POST["usename"]
+        username = request.POST["username"]
         password = request.POST["password"]
         user = authenticate(request , username=username , password=password)
         if user is not None:
@@ -43,7 +43,7 @@ def delete_todo(request):
     todo = Todos.objects.get(id=id)
     todo.delete()
     return HttpResponse("task deleted")
-    
+
 
 @login_required(login_url="/login")
 def update_todo(request):
