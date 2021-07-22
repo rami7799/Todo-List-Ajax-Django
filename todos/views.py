@@ -29,7 +29,7 @@ def register_user(request):
         password = request.POST.get("password")
         re_password = request.POST.get("re-password")
         if password == re_password:
-            User.objects.create(username=username , email=email , password=password)
+            User.objects.create_user(username=username , email=email , password=password)
             return redirect("/")
         else:
             return HttpResponse("invalid")
