@@ -36,16 +36,17 @@ def register_user(request):
 
 def login_user(request):
     if request.method == "POST":
-       login_form = LoginForm()
-       if login_form.is_valid():
-           username = login_form.cleaned_data.get("username")
-           password = login_form.cleaned_data.get("password")
-           user = authenticate(request , username=username , password=password)
-           if user is not None:
-               login(request , user)
-               return redirect("/")
-    else:
-        login_form = LoginForm()
+        login_form = LoginForm(request.POST or None)
+        if login_form.is_valid():
+            username = login_form.cleaned_data.get("username")
+            password = login_form.cleaned_data.get("password")
+            user = authenticate(request , username=username , password=password)
+            if user is not None:
+                login(request , user)
+                return redirect("/")
+            else:
+                return redirect("/login")
+        return HttpResponse("invalid")
 
 
 @login_required(login_url="/login")
