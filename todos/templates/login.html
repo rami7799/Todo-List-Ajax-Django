@@ -47,8 +47,8 @@
         <h2>Login Page</h2>
         <form method="POST" action="/login-user">
             {% csrf_token %}
-            <input type="text" placeholder="Username" name="username" id="username">
-            <input type="password" placeholder="Password" name="password"  id="password">
+            {{ form.username }}
+            {{ form.password }}
             <input class="btn btn-info" type="submit">
         </form>
         <div class="row">

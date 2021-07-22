@@ -2,9 +2,11 @@ from django.shortcuts import redirect, render
 from .models import Todos
 from django.http import JsonResponse , HttpResponse
 from django.template.loader import render_to_string 
-from django.contrib.auth import login , logout
+from django.contrib.auth import authenticate, login , logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from .forms import LoginForm
+
 
 
 @login_required(login_url="/login")
@@ -14,7 +16,8 @@ def home(request):
 def login_page(request):
     if request.user.is_authenticated:
         return redirect("/")
-    return render(request , "login.html")
+    form = LoginForm(request.POST or None)
+    return render(request , "login.html" , {"form" : form})
 
 def register_page(request):
     return render(request , "register.html")
@@ -33,14 +36,16 @@ def register_user(request):
 
 def login_user(request):
     if request.method == "POST":
-        username = request.POST.get("username")
-        password = request.POST.get("password")
-        user = User.objects.get(username=username , password=password)
-        if user is not None:
-            login(request , user)
-            return redirect("/")
-        else:
-            return redirect("/hfgh")
+       login_form = LoginForm()
+       if login_form.is_valid():
+           username = login_form.cleaned_data.get("username")
+           password = login_form.cleaned_data.get("password")
+           user = authenticate(request , username=username , password=password)
+           if user is not None:
+               login(request , user)
+               return redirect("/")
+    else:
+        login_form = LoginForm()
 
 
 @login_required(login_url="/login")
