@@ -41,7 +41,7 @@ def login_user(request):
             username = login_form.cleaned_data.get("username")
             password = login_form.cleaned_data.get("password")
             user = authenticate(request , username=username , password=password)
-            if user is not None:
+            if user:
                 login(request , user)
                 return redirect("/")
             else:
