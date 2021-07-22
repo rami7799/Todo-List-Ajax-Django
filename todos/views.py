@@ -40,8 +40,8 @@ def login_user(request):
     if request.method == "POST":
         login_form = LoginForm(request.POST or None)
         if login_form.is_valid():
-            username = login_form.cleaned_data.get("username")
-            password = login_form.cleaned_data.get("password")
+            username = request.POST.get("username")
+            password = request.POST.get("password")
             user = authenticate(request , username=username , password=password)
             if user:
                 login(request , user)
