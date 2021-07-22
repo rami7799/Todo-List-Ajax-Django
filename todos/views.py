@@ -45,7 +45,7 @@ def login_user(request):
                 login(request , user)
                 return redirect("/")
             else:
-                return redirect("/login")
+                return HttpResponse("invalid1")
         return HttpResponse("invalid")
 
 
