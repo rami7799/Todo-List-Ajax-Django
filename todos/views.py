@@ -35,6 +35,8 @@ def register_user(request):
             return HttpResponse("invalid")
 
 def login_user(request):
+    if request.user.is_authenticated:
+        return redirect("/")
     if request.method == "POST":
         login_form = LoginForm(request.POST or None)
         if login_form.is_valid():
