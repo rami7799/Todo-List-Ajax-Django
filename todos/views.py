@@ -29,7 +29,11 @@ def register_user(request):
         password = request.POST.get("password")
         re_password = request.POST.get("re-password")
         if password == re_password:
-            User.objects.create_user(username=username , email=email , password=password)
+            user = User.objects.filter(username=username).exists()
+            if user:
+                return HttpResponse("this username already exists !")
+            else:
+                User.objects.create_user(username=username , password=password , email=email)
             return redirect("/")
         else:
             return HttpResponse("invalid")
@@ -42,20 +46,19 @@ def login_user(request):
         if login_form.is_valid():
             username = request.POST.get("username")
             password = request.POST.get("password")
+            print(username)
+            print(password)
+            # username = login_form.cleaned_data.get('username')
+            # password = login_form.cleaned_data.get('password')
             user = authenticate(request , username=username , password=password)
-            if user:
+            # print(user)
+            if user is not None:
                 login(request , user)
                 return redirect("/")
             else:
                 return HttpResponse("invalid1")
         return HttpResponse("invalid")
 
-
-@login_required(login_url="/login")
-def todo_list(request):
-    todos = Todos.objects.order_by("-id").filter(user_id=request.user.id)
-    todos = render_to_string("ajax/todo-list.html" , {"todos" : todos})
-    return JsonResponse({'data' : todos})
 
 
 @login_required(login_url="/login")
