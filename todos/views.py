@@ -59,6 +59,12 @@ def login_user(request):
                 return HttpResponse("invalid1")
         return HttpResponse("invalid")
 
+    
+@login_required(login_url="/login")
+def todo_list(request):
+    todos = Todos.objects.order_by("-id").filter(user_id=request.user.id)
+    todos = render_to_string("ajax/todo-list.html" , {"todos" : todos})
+    return JsonResponse({'data' : todos})
 
 
 @login_required(login_url="/login")
